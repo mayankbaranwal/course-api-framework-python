@@ -5,6 +5,7 @@ import requests
 from assertpy.assertpy import assert_that
 
 from config import BASE_URI
+from utils.print_helpers import pretty_print
 
 
 def test_read_all_has_kent():
@@ -12,16 +13,20 @@ def test_read_all_has_kent():
     response = requests.get(BASE_URI)
     # response from requests has many useful properties
     # we can assert on the response status code
+    print(response.status_code)
+    print(requests.codes.ok)
     assert_that(response.status_code).is_equal_to(requests.codes.ok)
     # We can get python dict as response by using .json() method
-    response_text = response.json()
-    first_names = [people['fname'] for people in response_text]
+    peoples = response.json()
+    # pretty_print() is a module from python that indents the json response in a more readable way.
+    pretty_print(peoples)
+    first_names = [people['fname'] for people in peoples]
+    pretty_print(first_names)
     assert_that(first_names).contains('Kent')
 
 
 def test_new_person_can_be_added():
     unique_last_name = create_new_person()
-
     # After user is created, we read all the users and then use filter expression to find if the
     # created user is present in the response list
     peoples = requests.get(BASE_URI).json()
@@ -44,6 +49,8 @@ def create_new_person():
     # Ensure a user with a unique last name is created everytime the test runs
     # Note: json.dumps() is used to convert python dict to json string
     unique_last_name = f'User {str(uuid4())}'
+    print(str(uuid4()))
+    # dumps() is a method that takes the python dictionary and converts it into json string
     payload = dumps({
         'fname': 'New',
         'lname': unique_last_name
@@ -58,7 +65,9 @@ def create_new_person():
 
     # We use requests.post method with keyword params to make the request more readable
     response = requests.post(url=BASE_URI, data=payload, headers=headers)
+    print(response.status_code)
     assert_that(response.status_code, description='Person not created').is_equal_to(requests.codes.no_content)
+    print(unique_last_name)
     return unique_last_name
 
 
