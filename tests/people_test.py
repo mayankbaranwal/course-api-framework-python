@@ -2,7 +2,7 @@ from json import dumps
 from uuid import uuid4
 
 import requests
-from assertpy.assertpy import assert_that
+from assertpy.assertpy import assert_that, soft_assertions
 
 from config import BASE_URI
 
@@ -10,15 +10,19 @@ from config import BASE_URI
 def test_read_all_has_kent():
     # We use requests.get() with url to make a get request
     response = requests.get(BASE_URI)
-    # response from requests has many useful properties
-    # we can assert on the response status code
-    assert_that(response.status_code).is_equal_to(requests.codes.ok)
-    # We can get python dict as response by using .json() method
-    response_content = response.json()
+    # Added the soft_assertions() - we use this when we want our Test to run successfully (means failing one test won't
+    # stop the Test script's execution). Collect all the failures, consolidate all the errors and return all the test
+    # failures in last.
+    with soft_assertions():
+        # response from requests has many useful properties
+        # we can assert on the response status code
+        assert_that(response.status_code).is_equal_to(requests.codes.ok)
+        # We can get python dict as response by using .json() method
+        response_content = response.json()
 
-    # Use assertpy's fluent assertions to extract all fnames and then see the result is non empty and has
-    # Kent in it.
-    assert_that(response_content).extracting('fname').is_not_empty().contains('Kent')
+        # Use assertpy's fluent assertions to extract all fnames and then see the result is non empty and has
+        # Kent in it.
+        assert_that(response_content).extracting('fname').is_not_empty().contains('Kent')
 
 
 def test_new_person_can_be_added():
