@@ -10,9 +10,9 @@ from config import BASE_URI
 def test_read_all_has_kent():
     # We use requests.get() with url to make a get request
     response = requests.get(BASE_URI)
-    # Added the soft_assertions() - we use this when we want our Test to run successfully (means failing one test won't
-    # stop the Test script's execution). Collect all the failures, consolidate all the errors and return all the test
-    # failures in last.
+    # Added the soft_assertions() - we use this when we want our Tests to run successfully (means failing one test won't
+    # stop the Test script's execution). It will Collect all the failed tests, consolidate all of them with the errors
+    # and return all the failed test failures in last with the failure messages.
     with soft_assertions():
         # response from requests has many useful properties
         # we can assert on the response status code
