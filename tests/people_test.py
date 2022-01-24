@@ -20,7 +20,7 @@ def test_read_all_has_kent():
         # We can get python dict as response by using .json() method
         response_content = response.json()
 
-        # Use assertpy's fluent assertions to extract all fnames and then see the result is non empty and has
+        # Use assertpy's fluent assertions to extract all fnames and then see the result is non-empty and has
         # Kent in it.
         assert_that(response_content).extracting('fname').is_not_empty().contains('Kent')
 
