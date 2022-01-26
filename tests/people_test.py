@@ -1,9 +1,7 @@
 from json import dumps
 from uuid import uuid4
-
 import requests
 from assertpy.assertpy import assert_that
-
 from config import BASE_URI
 from utils.print_helpers import pretty_print
 
@@ -12,11 +10,10 @@ def test_read_all_has_kent():
     # We use requests.get() with url to make a get request
     response = requests.get(BASE_URI)
     # response from requests has many useful properties
-    # we can assert on the response status code
     print(response.status_code)
     print(requests.codes.ok)
     assert_that(response.status_code).is_equal_to(requests.codes.ok)
-    # We can get python dict as response by using .json() method
+    # Note : To Convert the JSON data into the Python Dictionary use - json() method.
     peoples = response.json()
     # pretty_print() is a module from python that indents the json response in a more readable way.
     pretty_print(peoples)
@@ -36,10 +33,8 @@ def test_new_person_can_be_added():
 
 def test_created_person_can_be_deleted():
     persons_last_name = create_new_person()
-
     peoples = requests.get(BASE_URI).json()
     newly_created_user = search_created_user_in(peoples, persons_last_name)[0]
-
     delete_url = f'{BASE_URI}/{newly_created_user["person_id"]}'
     response = requests.delete(delete_url)
     assert_that(response.status_code).is_equal_to(requests.codes.ok)
@@ -47,23 +42,19 @@ def test_created_person_can_be_deleted():
 
 def create_new_person():
     # Ensure a user with a unique last name is created everytime the test runs
-    # Note: json.dumps() is used to convert python dict to json string
     unique_last_name = f'User {str(uuid4())}'
     print(str(uuid4()))
-    # dumps() is a method that takes the python dictionary and converts it into json string
+    # Note: json.dumps() or dumps() method - is used to convert the Python dictionary to JSON String
     payload = dumps({
         'fname': 'New',
         'lname': unique_last_name
     })
-
-    # Setting default headers to show that the client accepts json
-    # And will send json in the headers
+    # Setting default headers to show that the client accepts json and will send the json in the headers
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-
-    # We use requests.post method with keyword params to make the request more readable
+    # We use requests.post() method with keyword params to make the request more readable
     response = requests.post(url=BASE_URI, data=payload, headers=headers)
     print(response.status_code)
     assert_that(response.status_code, description='Person not created').is_equal_to(requests.codes.no_content)
