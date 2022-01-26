@@ -29,7 +29,7 @@ Each chapter has its own dedicated branch in `/example/<chapter_no>_<topic>` for
 You can either use your IDE or terminal to switch to that branch and see the last updated commit.
 
 ```zsh
-# Checkout the entire branch
+# Checkout the entire branch~~~~
 git checkout example/01_setup_python_dependencies
 # Checkout to a specific commit, here <sha> can be found using `git log` command
 git checkout <sha>
