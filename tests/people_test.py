@@ -1,9 +1,7 @@
 from json import dumps
 from uuid import uuid4
-
 import requests
 from assertpy.assertpy import assert_that, soft_assertions
-
 from config import BASE_URI
 
 
@@ -14,20 +12,18 @@ def test_read_all_has_kent():
     # stop the Test script's execution). It will Collect all the failed tests, consolidate all of them with the errors
     # and return all the failed test failures in last with the failure messages.
     with soft_assertions():
-        # response from requests has many useful properties
+        # response from requests has many useful properties.
         # we can assert on the response status code
         assert_that(response.status_code).is_equal_to(requests.codes.ok)
-        # We can get python dict as response by using .json() method
+        # We can convert the JSON to --> Python Dictionary as response by using .json() method
         response_content = response.json()
-
         # Use assertpy's fluent assertions to extract all fnames and then see the result is non-empty and has
-        # Kent in it.
+        # 'Kent' user in it.
         assert_that(response_content).extracting('fname').is_not_empty().contains('Kent')
 
 
 def test_new_person_can_be_added():
     unique_last_name = create_new_person()
-
     # After user is created, we read all the users and then use filter expression to find if the
     # created user is present in the response list
     peoples = requests.get(BASE_URI).json()
@@ -37,10 +33,8 @@ def test_new_person_can_be_added():
 
 def test_created_person_can_be_deleted():
     persons_last_name = create_new_person()
-
     peoples = requests.get(BASE_URI).json()
     newly_created_user = search_created_user_in(peoples, persons_last_name)[0]
-
     delete_url = f'{BASE_URI}/{newly_created_user["person_id"]}'
     response = requests.delete(delete_url)
     assert_that(response.status_code).is_equal_to(requests.codes.ok)
@@ -54,15 +48,12 @@ def create_new_person():
         'fname': 'New',
         'lname': unique_last_name
     })
-
-    # Setting default headers to show that the client accepts json
-    # And will send json in the headers
+    # Setting default headers to show that the client accepts json and will send the json in the headers
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-
-    # We use requests.post method with keyword params to make the request more readable
+    # We use requests.post() method with keyword params to make the request more readable
     response = requests.post(url=BASE_URI, data=payload, headers=headers)
     assert_that(response.status_code, description='Person not created').is_equal_to(requests.codes.no_content)
     return unique_last_name
