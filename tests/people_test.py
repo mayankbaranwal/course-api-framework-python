@@ -4,13 +4,24 @@ import requests
 from assertpy.assertpy import assert_that, soft_assertions
 from config import BASE_URI
 
+'''
+An integral part of any Test Automation Framework is the assertion library that you choose. 
+A test that doesn't assert anything is of very less value.
+When it comes to choose an assertion library in Python, there are many options we can choose either something 
+out of your test like Unit Tests, and bunch of other modules. 
+We'll use Assertpy because it has really nice syntax and gives you many of the assert functions out of the box.
+It's easy to use. 
+AssertPy is itself inspired from AssertJ which itself a very popular library in Java language. 
+Read more in Readme file : https://github.com/assertpy/assertpy
+'''
+
 
 def test_read_all_has_kent():
     # We use requests.get() with url to make a get request
     response = requests.get(BASE_URI)
-    # Added the soft_assertions() - we use this when we want our Tests to run successfully (means failing one test won't
-    # stop the Test script's execution). It will Collect all the failed tests, consolidate all of them with the errors
-    # and return all the failed test failures in last with the failure messages.
+    # Added the soft_assertions() - we use this when we want our Tests to run successfully (means failing one/any test
+    # won't stop the Test script's execution). It will Collect all the failed tests, consolidate all of them with the
+    # errors and return all the failed test failures in last with the failure messages.
     with soft_assertions():
         # response from requests has many useful properties.
         # we can assert on the response status code
