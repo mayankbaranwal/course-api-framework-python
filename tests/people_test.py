@@ -1,14 +1,30 @@
 import random
 from json import dumps, loads
 from uuid import uuid4
-
 import pytest
 import requests
 from assertpy.assertpy import assert_that
 from jsonpath_ng import parse
-
 from config import BASE_URI
 from utils.file_reader import read_file
+
+"""
+In this chapter, we'll look at how do we work with JSON as well as use JSON Path to parse our JSON responses.
+So, JSON is very popular data format these days and most of the APIs basically use it as the request and response
+structure. It's also very useful for many Test Automation Purposes wherein you can use it as a data format to store 
+your Test Data, even in Config or whats not?
+So, its important ot take a grasp of that  
+https://automationhacks.io/2020/12/25/python-api-automation-framework-part5-working-with-json
+
+JSON is mostly a key:value data store and has support for some data primitive like string,number, boolean and also an 
+array type it looks very similar to python dictionary. 
+Let's understand some terms that comes quite frequently:
+1. Serialization : 
+The process of converting an Python Object to JSON.
+2. Deserialization :
+It's the reverse process of Serialization that's : 
+Converting the JSON Object into the Python Object. 
+"""
 
 
 def test_read_all_has_kent():
@@ -54,6 +70,8 @@ def create_data():
     last_name = f'Olabini{random_no}'
 
     payload['lname'] = last_name
+    # Anything that you mentioned after the Yield keyword is oging to get executed, when the Test Finishes it's
+    # execution.
     yield payload
 
 

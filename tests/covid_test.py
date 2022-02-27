@@ -1,7 +1,6 @@
 import requests
 from assertpy import assert_that
 from lxml import etree
-
 from config import COVID_TRACKER_HOST
 from utils.print_helpers import pretty_print
 
